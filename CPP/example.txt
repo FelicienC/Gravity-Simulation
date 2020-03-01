@@ -1,0 +1,8 @@
+Mass(kg); Radius(m);Dist_to_sun(m);MeanSpeed(m/s);   Color;    Name;
+1.989e30;   6.960e8;             0;             0; #ffffff;     Sun;
+3.301e23;   2.439e6;     5.7909e10;         49067; #ffeb66; Mercury;
+4.868e24;   6.051e5;    1.08209e11;         35025; #f6fcc7;   Venus;
+5.973e24;   6.371e6;    1.49597e11;         29783; #47c2ff;   Earth;
+6.418e23;   3.396e6;    2.27944e11;         24080; #e80000;    Mars;
+1.899e27;   6.991e7;    7.78340e11;         13058; #ffd078; Jupyter;
+5.684e24;   5.823e7;    1.42670e12;          9640; #eed078;  Saturn;
