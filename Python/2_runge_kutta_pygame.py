@@ -9,15 +9,15 @@ import pygame as pg
 import numpy as np
 
 G = 6.67e-11 #m3/(kg s2)
-MAX_SPEED = 0.01 #m/s
-PART_MASS = 1e6  #kg
-PART_RADIUS = 10 #m
+MAX_SPEED = 0.00 #m/s
+PART_MASS = 1e7  #kg
+PART_RADIUS = 3 #m
 SUN_MASS = 1e9 #kg
 SUN_RADIUS = 30 #m
 X_RANGE, Y_RANGE = 1400, 900 #m
 TIME_DELTA = 100 #s
 
-NB_PART = 20
+NB_PART = 100
 
 
 WHITE = (255, 255, 255)
@@ -63,52 +63,53 @@ class World():
                           for _ in range(NB_PART)]
 
         # Central massive particle
-        self.particles.append(Particle(SUN_MASS,
-                                       SUN_RADIUS,
-                                       X_RANGE/2, Y_RANGE/2, 0, 0))
+#        self.particles.append(Particle(SUN_MASS,
+#                                       SUN_RADIUS,
+#                                       X_RANGE/2, Y_RANGE/2, 0, 0))
 
-    def acceleration(self, Y):
+    def acceleration(self, Y, index):
         """
         Computes the acceleration of one particle based on the distance to the
         other particles of the space
         """
         acc = np.array([0.0, 0.0])
-        for part in self.particles:
+        for i, part in enumerate(self.particles):
+            if i == index: continue
             d3 = ((part.x-Y[0])**2 + (part.y-Y[1])**2)**1.5
-            if d3 < 1e4: # When particles are too close, divergences occur
+            if d3 < 1e4:  # When particles are too close, divergences occur
                 continue
             acc += (part.mass/d3)*G*np.array([part.x-Y[0], part.y-Y[1]])
         return acc
 
 
-    def y_prime(self, t, y):
+    def y_prime(self, t, y, index):
         """
         The time derivative of Y
         t = time at wich the derivate of y is evaluated
         y = [x, y, vx, vy]
         """
-        return np.concatenate((y[2:], self.acceleration(y)))
+        return np.concatenate((y[2:], self.acceleration(y, index)))
 
 
-    def runge_kutta(self, y_n, t_n, delta):
+    def runge_kutta(self, y_n, t_n, delta, index):
         """
         Runge Kutta integration scheme
         y_n = current value
         t_n = current time
         delta = time step
         """
-        k1 = delta*self.y_prime(t_n, y_n)
-        k2 = delta*self.y_prime(t_n+delta/2, y_n+k1/2)
-        k3 = delta*self.y_prime(t_n+delta/2, y_n+k2/2)
-        k4 = delta*self.y_prime(t_n+delta, y_n+k3)
+        k1 = delta*self.y_prime(t_n, y_n, index)
+        k2 = delta*self.y_prime(t_n+delta/2, y_n+k1/2, index)
+        k3 = delta*self.y_prime(t_n+delta/2, y_n+k2/2, index)
+        k4 = delta*self.y_prime(t_n+delta, y_n+k3, index)
         return y_n + (k1 + 2*(k2+k3) + k4)/6 #, t_n+delta
 
 
     def update(self, delta):
         """ Computes the new positions of the particles"""
         # Computes new positions
-        for part in self.particles:
-            part.set_xyvxvy(self.runge_kutta(part.to_y(), 0, delta))
+        for index, part in enumerate(self.particles):
+            part.set_xyvxvy(self.runge_kutta(part.to_y(), 0, delta, index))
 
 
 def main():

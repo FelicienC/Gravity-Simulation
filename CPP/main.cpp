@@ -45,7 +45,7 @@ int nb_particles = 200;
 int nb_previous;
 int frames = 0;
 double scale = 1e11;
-double delta = 1e3;
+double delta = 1e6;
 double simulationTime = 0.0;
 float currentTime, timeBase, fps;
 std::vector<Particle> particles;
