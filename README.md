@@ -36,16 +36,16 @@ The next evolution was to use a tree to sort the particles in space and turn thi
 Here is the first version of the quad tree, implemented on top of the python code. 
 
 <p align="center">
-  <img src="images/pygame_21_particles_quad_tree.gif", width=400>
+  <img src="Images/pygame_21_particles_quad_tree.gif">
 </p>
 
 And this shows which quadrants are used indeed to compute the acceleration on the red particle.
 <p align="center">
-  <img src="images/pygame_barnes_hut_acceleration.gif", width=400>
+  <img src="Images/pygame_barnes_hut_acceleration.gif">
 </p>
 
 Although the performance was better than with the previous method, it is still not really exploitable with pyhton. I hence implemented it in C++, and could simulate several thousands of particles, as shown in the following image:
 
 <p align="center">
-  <img src="images/glut_1000_particles_no_collisions.gif", width=400>
+  <img src="Images/glut_1000_particles_no_collisions.gif">
 </p>
